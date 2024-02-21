@@ -56,6 +56,9 @@ async function showBlog(req,res,next) {
 async function createBlog(req,res,next) {
     try{
         const blog = await Blog.create(req.body)
+        const user = req.user
+        user.blogs.addToSet(blog)
+        await user.save()
         res.locals.data.blog = blog
         next()
     } catch(error) {
@@ -76,6 +79,12 @@ async function updateBlog(req,res,next) {
 async function deleteBlog(req,res,next) {
     try{
         const blog = await Blog.findByIdAndDelete(req.params.id)
+        //req.user.blogs.pull(blog)
+         const user = req.user
+         const blogsArray = user.blogs
+         const index = blogsArray.findIndex(blog => blog._id === req.params.id )
+         user.blogs.splice(index, 1)
+        await user.save()
         res.locals.data.blog = blog
         next()
     } catch(error) {
