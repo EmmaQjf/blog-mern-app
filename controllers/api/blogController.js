@@ -1,18 +1,9 @@
 const Blog = require('../../models/blog')
 
 /*
-// get all the blogs
-router.get('/', blogCtrl.indexBlogs, blogCtrl.jsonBlogs)
-// get individual post
-router.get('/:id',blogCtrl.showBlog, blogCtrl.jsonBlog)
-// create a blog
-router.post('/', userCtrl.Auth, blogCtrl.createBlog, blogCtrl.jsonBlog)
-// update a blog
-router.post('/:id', userCtrl.Auth, blogCtrl.updateBlog, blogCtrl.jsonBlog)
-// delete a blog
-router.delete('/:id', userCtrl.Auth, userCtrl.deleteUser,blogCtrl.jsonBlog)
+req.user is typically used to represent the authenticated user associated with the request.
+req.body is used to access data submitted in the request body, such as form data or JSON payloads.
 */
-
 
 module.exports = {
     indexBlogs,
@@ -24,7 +15,7 @@ module.exports = {
     jsonBlogs
 }
 
-
+//_ means I am not using this parameter 
 function jsonBlog(_, res) {
     res.json(res.locals.data.blog)
 }
@@ -39,7 +30,7 @@ async function indexBlogs(req,res,next) {
         res.locals.data.blogs = blogs
         next()
     } catch(error) {
-        res.status(400).json({msg: error.msg})
+        res.status(400).json({msg: error.message})
     }
 }
 
@@ -49,20 +40,20 @@ async function showBlog(req,res,next) {
         res.locals.data.blog = blog
         next()
     } catch(error) {
-        res.status(400).json({msg: error.msg})
+        res.status(400).json({msg: error.message})
     }
 }
 
 async function createBlog(req,res,next) {
     try{
+        req.body.user = req.user._id // add the id, the value, to the user property in the blog 
         const blog = await Blog.create(req.body)
-        const user = req.user
-        user.blogs.addToSet(blog)
-        await user.save()
+        req.user.blogs.addToSet(blog) // add the blog to the blogs in the user
+        await req.user.save()
         res.locals.data.blog = blog
         next()
     } catch(error) {
-        res.status(400).json({msg: error.msg})
+        res.status(400).json({msg: error.message})
     }
 }
 
@@ -72,7 +63,7 @@ async function updateBlog(req,res,next) {
         res.locals.data.blog = blog
         next()
     } catch(error) {
-        res.status(400).json({msg: error.msg})
+        res.status(400).json({msg: error.message})
     }
 }
 
@@ -80,6 +71,8 @@ async function deleteBlog(req,res,next) {
     try{
         const blog = await Blog.findByIdAndDelete(req.params.id)
         //req.user.blogs.pull(blog)
+        //req.user.save()
+        // req.user.blogs.indexOf(blog)
          const user = req.user
          const blogsArray = user.blogs
          const index = blogsArray.findIndex(blog => blog._id === req.params.id )
@@ -88,6 +81,6 @@ async function deleteBlog(req,res,next) {
         res.locals.data.blog = blog
         next()
     } catch(error) {
-        res.status(400).json({msg: error.msg})
+        res.status(400).json({msg: error.message})
     }
 }

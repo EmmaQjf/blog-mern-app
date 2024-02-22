@@ -1,112 +1,44 @@
-import { useState, useEffect } from 'react'
-import TodoList from './components/TodoList/TodoList'
+import {useState, useEffect} from 'react'
+import {Route, Routes} from 'react-router-dom'
+import AuthPage from './pages/AuthPage/AuthPage'
+import HomePage from './pages/HomePage/HomePage'
+import ShowPage from './pages/ShowPage/ShowPage'
 import styles from './App.module.scss'
 
-
 export default function App(){
-    const [todos, setTodos] = useState([])
-    const [completedTodos, setCompletedTodos] = useState([])
-    const [newTodo, setNewTodo] = useState({
-        title: '',
-        completed: false
-    })
 
-    //createTodos
-    const createTodo = async () => {
-        const body = {...newTodo}
-        try {
-            const response = await fetch('/api/todos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            })
-            const createdTodo = await response.json()
-            const todosCopy = [createdTodo,...todos]
-            setTodos(todosCopy)
-            setNewTodo({
-                title: '',
-                completed: false
-            })
-        } catch (error) {   
-            console.error(error)
-        }
+    const [user, setUser] = useState(null) // user is an object
+    const [token, setToken] = useState('') // token is a string 
+
+    const signUp = async(credentials) => {
+        // very much like postman 
+      try {
+        const response = await fetch('/api/users/signup',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' //sent json file
+            },
+            body: json.stringfy(credentials) // change javascript object to json string
+        })
+        const data = await response.json() //change raw json data string to javascript object
+        // need to know what data is returned back by backend API
+        //in this case it is {user, token}
+        setUser(data.user)
+        setToken(data.token)
+        //token is still empty until the function is callded and finished 
+        localStorage.setItem('token',data.token)
+      } catch(error){
+         console.error(error)
+      }
+       
     }
-    //deleteTodos
-    const deleteTodo = async (id) => {
-        try {
-            const index = completedTodos.findIndex((todo) => todo._id === id)
-            const completedTodosCopy = [...completedTodos]
-            const response = await fetch(`/api/todos/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            await response.json()
-            completedTodosCopy.splice(index, 1)
-            setCompletedTodos(completedTodosCopy)
-        } catch (error) {
-            console.error(error)
-        }
-    }
-    //moveToCompleted
-    const moveToCompleted = async (id) => {
-        try {
-            const index = todos.findIndex((todo) => todo._id === id)
-            const todosCopy = [...todos]
-            const subject = todosCopy[index]
-            subject.completed = true 
-            const response = await fetch(`/api/todos/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(subject)
-            })
-            const updatedTodo = await response.json()
-            const completedTDsCopy = [updatedTodo, ...completedTodos]
-            setCompletedTodos(completedTDsCopy)
-            todosCopy.splice(index, 1)
-            setTodos(todosCopy)
-        } catch (error) {
-            console.error(error)
-        }
-    }
-    //getTodos
-    const getTodos = async () => {
-        try{
-            const response = await fetch('/api/todos')
-            const foundTodos = await response.json()
-            setTodos(foundTodos.reverse())
-            console.log('hey')
-            const responseTwo = await fetch('/api/todos/completed')
-            const foundCompletedTodos = await responseTwo.json()
-            setCompletedTodos(foundCompletedTodos.reverse())
-        } catch(error){
-            console.error(error)
-        }
-    }
-    useEffect(() => {
-        getTodos()
-    }, [])
     return(
-        <>
-			
-            <div className={styles.banner}>
-                <h1>The World Famous Big Poppa Code React Starter Kit</h1>
-              <img src='https://i.imgur.com/5WXigZL.jpg'/>
-            </div>
-            <TodoList
-            newTodo={newTodo}
-            setNewTodo={setNewTodo}
-            createTodo={createTodo}
-            todos={todos}
-            moveToCompleted={moveToCompleted}
-            completedTodos={completedTodos}
-            deleteTodo={deleteTodo}
-            />
-        </>
+        <div className={styles.App}>
+         <Routes>
+            <Route path = '/' element={<HomePage user={user} token={token} setToken={setToken} />}/>
+            <Route path='/register' element= {<AuthPage setToken={setToken}  setUser={setUser} signUp={signUp}/>}/>
+            <Route path='/blog' element={<ShowPage user={user} token={token} setToken={setToken}/>}/>
+         </Routes>
+        </div>
     )
 }

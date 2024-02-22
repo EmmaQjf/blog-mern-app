@@ -51,6 +51,7 @@ async function createComment(req,res,next) {
     try{
         const comment = await Comment.create(req.body)
         const blog = await Blog.findOne({_id: req.params.id})
+        blog.comments.addtoSet(comment)
         // const user = req.user
         // user.blogs.addToSet(blog)
         // await user.save()

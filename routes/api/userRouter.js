@@ -15,4 +15,5 @@ router.delete('/:id', userCtrl.Auth, userCtrl.deleteUser)
 // show the user info
 router.get('/:id', userCtrl.showUser)
 
+
 module.exports = router

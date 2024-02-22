@@ -36,7 +36,8 @@ exports.signup = async (req, res) => {
   try{
     const user = new User(req.body)
     await user.save()
-    res.json(user)
+    const token = await user.generateAuthToken()
+    res.json({ user, token })
   } catch(error){
     res.status(400).json({message: error.message})
   }

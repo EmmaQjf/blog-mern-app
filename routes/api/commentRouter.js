@@ -9,4 +9,5 @@ router.put('/:id', userCtrl.Auth, commentCtrl.updateComment,commentCtrl.jsonComm
 router.delete('/:id',userCtrl.Auth, commentCtrl.deleteComment,commentCtrl.jsonComment)
 router.get('/',commentCtrl.indexComments,commentCtrl.jsonComments )
 router.get('/:id',commentCtrl.showComment,commentCtrl.jsonComment )
+
 module.exports = router
