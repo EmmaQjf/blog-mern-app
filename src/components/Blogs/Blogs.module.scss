@@ -1,0 +1,18 @@
+article:nth-child(3n+0){
+    background-color: lightblue
+}
+
+article:nth-child(3n-1){
+    background-color: lightcyan
+}
+
+article:nth-child(3n-2){
+    background-color: lemonchiffon
+}
+
+article {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+}

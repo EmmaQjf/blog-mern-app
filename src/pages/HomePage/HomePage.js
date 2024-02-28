@@ -35,10 +35,19 @@ export default function HomePage (props){
         }
     }, [])
 
+
+
+    //NEW GOT TO SHOW THE CREATE FORM
+    useEffect(() => {
+       setShowCreate(true)
+    },[props.user])
+
     return(
         <div>
             <h1>Welcome to the Liberty Blog</h1>
-            { showCreate? <CreateForm/> : <></> }
+            { showCreate? <CreateForm user={props.user} 
+            token={props.token}
+            createBlog={props.createBlog}/> : <></> }
             { blogs.length? <Blogs blogs={blogs}/> : 'No blogs yet' }
         </div>
     )

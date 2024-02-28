@@ -100,7 +100,7 @@ const getAllBlogs = async () => {
 // show a blog 
 const getIndividualBlog = async(id) => {
     try {
-        const response = await fetch(`/api/blogs/${id}}`)
+        const response = await fetch(`/api/blogs/${id}`)
         const data = await response.json()
         return data
     } catch (error) {
@@ -116,7 +116,7 @@ const updateBlog = async (NewBlogData, token,id) => {
         return
     }
     try {
-        const response = await fetch(`/api/blogs/${id}}`, {
+        const response = await fetch(`/api/blogs/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const deleteBlog = async (id, token) => {
         return
     }
     try {
-        const response = await fetch(`/api/blogs/${id}}`, {
+        const response = await fetch(`/api/blogs/${id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -172,8 +172,9 @@ const deleteBlog = async (id, token) => {
             setUser={setUser} 
             signUp={signUp}
             login={login}/>}/>
-            <Route path='/blog' element={<ShowPage 
+            <Route path='/blog/:id' element={<ShowPage 
             user={user} 
+            setUser={setUser}
             token={token} 
             setToken={setToken}
             getIndividualBlog={getIndividualBlog}

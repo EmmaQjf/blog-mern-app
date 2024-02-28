@@ -1,5 +1,7 @@
 import {useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import styles from'./SignUpForm.module.scss'
+
 
 export default function SignUpForm (props) {
     const [credentials, setCredentials] = useState({
@@ -10,6 +12,7 @@ export default function SignUpForm (props) {
     const handleCredentails =(e) => {
         setCredentials({...credentials, [e.target.name]:e.target.value})
     }
+    const navigateTo = useNavigate()
 
     return (
         <>
@@ -18,15 +21,16 @@ export default function SignUpForm (props) {
         onSubmit={(e)=> {
             e.preventDefault()
             props.signUp(credentials)
+            navigateTo('/')
         }}
         >
-            <input placeholder='name' type='text' name='name' value={credentials.name}
+            <input className={styles.input} placeholder='name' type='text' name='name' value={credentials.name}
             onChange={handleCredentails}/>
-            <input placeholder='email' type='text' name='email' value={credentials.email}
+            <input className={styles.input} placeholder='email' type='text' name='email' value={credentials.email}
             onChange={handleCredentails}/>
-            <input placeholder='password' type='password' name='password' value={credentials.password}
+            <input className={styles.input} placeholder='password' type='password' name='password' value={credentials.password}
             onChange={handleCredentails}/>
-            <input type='submit' value='submit'/>
+            <input  className={styles.button}type='submit' value='submit'/>
         </form>
         </>
     )

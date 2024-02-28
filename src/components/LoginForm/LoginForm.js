@@ -1,4 +1,5 @@
 import {useState} from 'react'
+import {useNavigate} from 'react-router-dom'
 import styles from './LoginForm.module.scss'
 
 export default function LoginForm (props) {
@@ -10,6 +11,9 @@ export default function LoginForm (props) {
     const handleCredentails = (e)=> {
         setCredentials({...credentials, [e.target.name]:e.target.value})
     }
+
+    const navigateTo = useNavigate()
+
     return (
         <>
         <h2 className={styles.heading}>This is a login form</h2>
@@ -17,12 +21,13 @@ export default function LoginForm (props) {
         onSubmit= {(e)=> {
             e.preventDefault()
             props.login(credentials)
+            navigateTo('/')
         }}>
-            <input type="text" value={credentials.email} placeholder='email' name='email'
+            <input className={styles.input} type="text" value={credentials.email} placeholder='email' name='email'
             onChange={handleCredentails}/>
-             <input type="text" value={credentials.password} placeholder='password' name='password'
+             <input className={styles.input} type="text" value={credentials.password} placeholder='password' name='password'
             onChange={handleCredentails}/>
-             <input type="submit" value='submit'  />
+             <input className={styles.button} type="submit" value='submit'  />
         </form>
         </>
     )

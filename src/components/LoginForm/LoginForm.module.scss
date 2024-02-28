@@ -1,3 +1,23 @@
+@mixin formStyle {
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin inputStyle {
+    font-size: 1.5rem;
+    margin: 5px 5px 5px 5px
+}
+
+@mixin buttonStyle {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    color: purple;
+}
+body{
+    font-size: 1.5rem
+}
 .heading{
     color: purple;
     font-size: 2rem;
@@ -5,8 +25,13 @@
 }
 
 .form{
-    display:flex;
-    flex-direction:column;
-    justify-content: center;
-    align-items: center;
+    @include formStyle
+}
+
+.input{
+    @include inputStyle
+}
+
+.button{
+    @include buttonStyle()
 }

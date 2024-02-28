@@ -1,0 +1,19 @@
+@import "../LoginForm/LoginForm.module.scss";
+
+h1{
+    font-size: 2rem;
+    color:lightcoral;
+    text-align: center;
+}
+
+.form{
+   @include formStyle
+}
+
+.input{
+    @include inputStyle
+}
+
+.button{
+    @include buttonStyle()
+}
