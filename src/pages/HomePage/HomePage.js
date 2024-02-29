@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import Blogs from '../../components/Blogs/Blogs'
-import CreateForm from '../../components/createForm/createForm'
+import CreateForm from '../../components/CreateForm/CreateForm'
 
 
 export default function HomePage (props){

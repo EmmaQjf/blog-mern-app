@@ -27,7 +27,7 @@ export default function CreateForm(props){
     }
     return (
         <>
-        <h1>Create a New BlogPost {props.user.name}</h1>
+        <h1>Create a New BlogPost {props.user? props.user.name: ''}</h1>
         <form 
         className={styles.form}
         onSubmit={handleSubmit}>
